@@ -1,7 +1,7 @@
 using System;
-using Nexus.Domain.Entities;
+using Nexus.Domain.Enums;
 
-namespace Nexus.Domain.Enums;
+namespace Nexus.Domain.Entities;
 
 public class Jogo : EntidadeBase
 {
