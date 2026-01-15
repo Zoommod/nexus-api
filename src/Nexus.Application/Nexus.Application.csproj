@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>
@@ -14,6 +15,7 @@
     <Folder Include="DTOs/Comum/" />
     <Folder Include="DTOs/Genero/" />
     <Folder Include="DTOs/Jogo/" />
+    <Folder Include="Mappings/" />
   </ItemGroup>
 
   <PropertyGroup>
