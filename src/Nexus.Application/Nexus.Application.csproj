@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs/Comum/" />
+    <Folder Include="DTOs/Genero/" />
     <Folder Include="DTOs/Jogo/" />
   </ItemGroup>
 
