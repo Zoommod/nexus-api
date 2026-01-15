@@ -9,6 +9,7 @@ builder.Services.AddDbContext<NexusDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IJogoRepositorio, JogoRepositorio>();
+builder.Services.AddScoped<IFilmeRepositorio, FilmeRepositorio>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
