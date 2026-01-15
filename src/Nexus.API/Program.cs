@@ -10,6 +10,7 @@ builder.Services.AddDbContext<NexusDbContext>(options =>
 
 builder.Services.AddScoped<IJogoRepositorio, JogoRepositorio>();
 builder.Services.AddScoped<IFilmeRepositorio, FilmeRepositorio>();
+builder.Services.AddScoped<IGeneroRepositorio, GeneroRepositorio>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
