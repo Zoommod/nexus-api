@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Nexus.Application.Interfaces;
 using Nexus.Application.Mappings;
+using Nexus.Application.Services;
 using Nexus.Domain.Interfaces;
 using Nexus.Infrastructure.Data;
 using Nexus.Infrastructure.Repositories;
@@ -15,6 +17,8 @@ builder.Services.AddScoped<IJogoRepositorio, JogoRepositorio>();
 builder.Services.AddScoped<IFilmeRepositorio, FilmeRepositorio>();
 builder.Services.AddScoped<IGeneroRepositorio, GeneroRepositorio>();
 builder.Services.AddScoped<IAvaliacaoRepositorio, AvaliacaoRepositorio>();
+
+builder.Services.AddScoped<IJogoService, JogoService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

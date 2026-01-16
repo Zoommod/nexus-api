@@ -15,7 +15,9 @@
     <Folder Include="DTOs/Comum/" />
     <Folder Include="DTOs/Genero/" />
     <Folder Include="DTOs/Jogo/" />
+    <Folder Include="Interfaces/" />
     <Folder Include="Mappings/" />
+    <Folder Include="Services/" />
   </ItemGroup>
 
   <PropertyGroup>
