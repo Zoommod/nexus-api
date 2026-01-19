@@ -20,6 +20,7 @@ builder.Services.AddScoped<IAvaliacaoRepositorio, AvaliacaoRepositorio>();
 
 builder.Services.AddScoped<IJogoService, JogoService>();
 builder.Services.AddScoped<IFilmeService, FilmeService>();
+builder.Services.AddScoped<IGeneroService, GeneroService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
