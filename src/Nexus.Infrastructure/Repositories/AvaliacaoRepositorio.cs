@@ -13,14 +13,14 @@ public class AvaliacaoRepositorio : RepositorioBase<Avaliacao>, IAvaliacaoReposi
 
     }
 
-    public async Task<IEnumerable<Avaliacao>> ObterPorJogosAsync(Guid jogoId)
+    public async Task<IEnumerable<Avaliacao>> ObterPorJogoAsync(Guid jogoId)
     {
         return await _dbSet
             .Where(a => a.JogoId == jogoId)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Avaliacao>> ObterPorFilmesAsync(Guid filmeId)
+    public async Task<IEnumerable<Avaliacao>> ObterPorFilmeAsync(Guid filmeId)
     {
         return await _dbSet
             .Where(a => a.FilmeId == filmeId)
