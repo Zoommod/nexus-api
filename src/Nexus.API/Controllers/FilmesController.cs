@@ -67,6 +67,29 @@ namespace Nexus.API.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<FilmeDto>> Atualizar(Guid id, [FromBody] AtualizarFilmeDto dto)
+        {
+            try
+            {
+                var usuarioId = "usuario-temporario-123";
+                var filme = await _filmeService.AtualizarAsync(id, dto, usuarioId);
+                return Ok(filme);
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                return Forbid();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+        }
+
       
     }
 }
