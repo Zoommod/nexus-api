@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Application.DTOs.Filme;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Entities;
 
 namespace Nexus.API.Controllers
 {
@@ -52,5 +54,19 @@ namespace Nexus.API.Controllers
             return Ok(filmes);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<FilmeDto>> Criar([FromBody] CriarFilmeDto dto)
+        {
+            try{
+                var usuarioId = "usuario-temporario-123";
+                var filme = await _filmeService.CriarAsync(dto, usuarioId);
+                return CreatedAtAction(nameof(ObterPorId), new { id = filme.Id}, filme);
+            }
+            catch (ArgumentException ex){
+                return BadRequest(new { mensagem = ex.Message});
+            }
+        }
+
+      
     }
 }
