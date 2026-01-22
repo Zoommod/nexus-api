@@ -89,7 +89,26 @@ namespace Nexus.API.Controllers
                 return BadRequest(new { mensagem = ex.Message });
             }
         }
+        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Deletar(Guid id)
+        {
+            try
+            {
+                var usuarioId = "usuario-temporario-123";
+                await _filmeService.DeletarAsync(id, usuarioId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
 
+            catch(UnauthorizedAccessException _)
+            {
+                return Forbid();
+            }
+        }
       
     }
 }
