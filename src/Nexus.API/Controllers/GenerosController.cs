@@ -45,5 +45,25 @@ namespace Nexus.API.Controllers
             
             return Ok(genero);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<GeneroDto>> Criar([FromBody] CriarGeneroDto dto)
+        {
+            try
+            {
+                var genero = await _generoService.CriarAsync(dto);
+                return CreatedAtAction(nameof(ObterPorId), new { id = genero.Id}, genero);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+            catch(InvalidOperationException ex)
+            {
+                return Conflict(new { mensagem = ex.Message});
+            }
+            
+
+        }
     }
 }
