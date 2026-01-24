@@ -87,5 +87,19 @@ namespace Nexus.API.Controllers
                 return Conflict(new { mensagem = ex.Message });
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Deletar(Guid id)
+        {
+            try
+            {
+                await _generoService.DeletarAsync(id);
+                return NoContent();
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
+        }
     }
 }
