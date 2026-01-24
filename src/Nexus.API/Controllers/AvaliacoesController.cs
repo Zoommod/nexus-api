@@ -66,5 +66,28 @@ namespace Nexus.API.Controllers
                 return NotFound(new { mensagem = ex.Message });
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<AvaliacaoDto>> Atualizar (Guid id, [FromBody] AtualizarAvaliacaoDto dto)
+        {
+            try
+            {
+                var usuarioId = "usuario-temporario-123";
+                var avaliacao = await _avaliacaoService.AtualizarAsync(id, dto, usuarioId);
+                return Ok(avaliacao);
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound( new { mensagem = ex.Message });
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                return Forbid();
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+        }
     }
 }
