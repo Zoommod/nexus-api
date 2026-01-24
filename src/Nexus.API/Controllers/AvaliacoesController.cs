@@ -26,5 +26,26 @@ namespace Nexus.API.Controllers
             
             return Ok(avaliacao);
         }
+
+        [HttpGet("jogo/{jogoId}")]
+        public async Task<ActionResult<IEnumerable<AvaliacaoDto>>> ObterPorJogo(Guid jogoId)
+        {
+            var avaliacoes = await _avaliacaoService.ObterPorJogoAsync(jogoId);
+            return Ok(avaliacoes);
+        }
+
+        [HttpGet("filme/{filmeId}")]
+        public async Task<ActionResult<IEnumerable<AvaliacaoDto>>> ObterPorFilme(Guid filmeId)
+        {
+            var avaliacoes = await _avaliacaoService.ObterPorFilmeAsync(filmeId);
+            return Ok(avaliacoes);
+        }
+
+        [HttpGet("usuario/{usuarioId}")]
+        public async Task<ActionResult<IEnumerable<AvaliacaoDto>>> ObterPorUsuario(string usuarioId)
+        {
+            var avaliacoes = await _avaliacaoService.ObterPorUsuarioAsync(usuarioId);
+            return Ok(avaliacoes);
+        }
     }
 }
