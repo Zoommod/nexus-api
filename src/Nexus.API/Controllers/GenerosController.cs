@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Application.DTOs.Genero;
 using Nexus.Application.Interfaces;
+using Nexus.Application.Services;
 using Nexus.Domain.Entities;
 
 namespace Nexus.API.Controllers
@@ -63,7 +64,28 @@ namespace Nexus.API.Controllers
                 return Conflict(new { mensagem = ex.Message});
             }
             
+        }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<GeneroDto>> Atualizar(Guid id, [FromBody] AtualizarGeneroDto dto)
+        {
+            try
+            {
+                var genero = await _generoService.AtualizarAsync(id, dto);
+                return Ok(genero);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { mensagem = ex.Message });
+            }
         }
     }
 }
