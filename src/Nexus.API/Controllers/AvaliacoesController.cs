@@ -47,5 +47,24 @@ namespace Nexus.API.Controllers
             var avaliacoes = await _avaliacaoService.ObterPorUsuarioAsync(usuarioId);
             return Ok(avaliacoes);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<AvaliacaoDto>> Criar([FromBody] CriarAvaliacaoDto dto)
+        {
+            try
+            {
+                var usuarioId = "usuario-temporario-123";
+                var avaliacao  =await _avaliacaoService.CriarAsync(dto, usuarioId);
+                return CreatedAtAction(nameof (ObterPorId), new { id = avaliacao.Id }, avaliacao);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message} );
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
+        }
     }
 }
