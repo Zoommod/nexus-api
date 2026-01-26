@@ -80,7 +80,7 @@ namespace Nexus.API.Controllers
             {
                 return NotFound(new { mensagem = ex.Message });
             }
-            catch(UnauthorizedAccessException ex)
+            catch(UnauthorizedAccessException)
             {
                 return Forbid();
             }
@@ -104,7 +104,7 @@ namespace Nexus.API.Controllers
                 return NotFound(new { mensagem = ex.Message });
             }
 
-            catch(UnauthorizedAccessException _)
+            catch(UnauthorizedAccessException)
             {
                 return Forbid();
             }

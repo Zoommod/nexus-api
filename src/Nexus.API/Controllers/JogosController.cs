@@ -81,7 +81,7 @@ public class JogosController : ControllerBase
         {
             return NotFound(new { mensagem = ex.Message });
         }
-        catch (UnauthorizedAccessException ex)
+        catch (UnauthorizedAccessException)
         {
             return Forbid();
         }
@@ -105,7 +105,7 @@ public class JogosController : ControllerBase
         {
             return NotFound(new { mensagem = ex.Message });
         }
-        catch (UnauthorizedAccessException ex)
+        catch (UnauthorizedAccessException)
         {
             return Forbid();
         }

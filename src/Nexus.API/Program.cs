@@ -23,11 +23,28 @@ builder.Services.AddScoped<IFilmeService, FilmeService>();
 builder.Services.AddScoped<IGeneroService, GeneroService>();
 builder.Services.AddScoped<IAvaliacaoService, AvaliacaoService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<NexusDbContext>();
+    DataSeeder.Seed(context);
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -36,6 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
