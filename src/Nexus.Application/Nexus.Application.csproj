@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs/Auth/" />
     <Folder Include="DTOs/Avaliacao/" />
     <Folder Include="DTOs/Comum/" />
     <Folder Include="DTOs/Genero/" />
