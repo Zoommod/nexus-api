@@ -19,6 +19,7 @@
     <Folder Include="Data/Configurations/" />
     <Folder Include="Identity/" />
     <Folder Include="Repositories/" />
+    <Folder Include="Services/" />
   </ItemGroup>
 
   <PropertyGroup>
