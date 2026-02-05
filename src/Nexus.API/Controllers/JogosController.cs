@@ -1,13 +1,15 @@
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Application.DTOs.Jogo;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Enums;
 
 namespace Nexus.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class JogosController : ControllerBase
+public class JogosController : BaseController
 {
     private readonly IJogoService _jogoService;
 
@@ -19,14 +21,16 @@ public class JogosController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<JogoDto>>> ObterTodos()
     {
-        var jogos = await _jogoService.ObterTodosAsync();
+        var usuarioId = ObterUsuarioId();
+        var jogos = await _jogoService.ObterTodosPorUsuarioAsync(usuarioId);
         return Ok(jogos);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<JogoDto>> ObterPorId(Guid id)
     {
-        var jogo = await _jogoService.ObterPorIdAsync(id);
+        var usuarioId = ObterUsuarioId();
+        var jogo = await _jogoService.ObterPorIdAsync(id, usuarioId);
 
         if (jogo == null)
             return NotFound(new { mensagem = "Jogo não encontrado" });
@@ -35,9 +39,10 @@ public class JogosController : ControllerBase
     }
 
     [HttpGet("status/{status}")]
-    public async Task<ActionResult<IEnumerable<JogoDto>>> ObterPorStatus(int status)
+    public async Task<ActionResult<IEnumerable<JogoDto>>> ObterPorStatus(StatusMidia status)
     {
-        var jogos = await _jogoService.ObterPorStatusAsync(status);
+        var usuarioId = ObterUsuarioId();
+        var jogos = await _jogoService.ObterPorStatusAsync(status, usuarioId);
         return Ok(jogos);
     }
 
@@ -47,7 +52,8 @@ public class JogosController : ControllerBase
         if (string.IsNullOrWhiteSpace(titulo))
             return BadRequest(new { mensagem = "O título deve ser informado" });
 
-        var jogos = await _jogoService.BuscarPorTituloAsync(titulo);
+        var usuarioId = ObterUsuarioId();
+        var jogos = await _jogoService.BuscarPorTituloAsync(titulo, usuarioId);
         return Ok(jogos);
     }
 
@@ -56,8 +62,7 @@ public class JogosController : ControllerBase
     {
         try
         {
-            var usuarioId = "usuario-temporario-123";
-
+            var usuarioId = ObterUsuarioId();
             var jogo = await _jogoService.CriarAsync(dto, usuarioId);
             return CreatedAtAction(nameof(ObterPorId), new { id = jogo.Id }, jogo);
         }
@@ -72,8 +77,7 @@ public class JogosController : ControllerBase
     {
         try
         {
-            var usuarioId = "usuario-temporario-123";
-
+            var usuarioId = ObterUsuarioId();
             var jogo = await _jogoService.AtualizarAsync(id, dto, usuarioId);
             return Ok(jogo);
         }
@@ -96,8 +100,7 @@ public class JogosController : ControllerBase
     {
         try
         {
-            var usuarioId = "usuario-temporario-123";
-
+            var usuarioId = ObterUsuarioId();
             await _jogoService.DeletarAsync(id, usuarioId);
             return NoContent();
         }

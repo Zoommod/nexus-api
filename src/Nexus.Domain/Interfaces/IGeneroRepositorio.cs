@@ -9,4 +9,5 @@ public interface IGeneroRepositorio : IRepositorioBase<Genero>
     Task<IEnumerable<Genero>> ObterComJogosAsync();
     Task<IEnumerable<Genero>> ObterComFilmesAsync();
     Task<bool> ExistePorNomeAsync(string nome);
+    Task<IEnumerable<Genero>> ObterPorIdsAsync(IEnumerable<Guid> ids);
 }

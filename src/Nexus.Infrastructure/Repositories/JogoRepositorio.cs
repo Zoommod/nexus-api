@@ -11,34 +11,50 @@ public class JogoRepositorio : RepositorioBase<Jogo>, IJogoRepositorio
 {
     public JogoRepositorio(NexusDbContext context) : base(context)
     {
-        
     }
 
-    public async Task<IEnumerable<Jogo>> ObterPorStatusAsync(StatusMidia status)
+    public async Task<IEnumerable<Jogo>> ObterTodosPorUsuarioAsync(string usuarioId)
     {
-        return await _dbSet
-            .Where(j => j.Status == status)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Jogo>> ObterPorGeneroAsync(Guid generoId)
-    {
-        return await _dbSet
-            .Where(j => j.Generos.Any(g => g.Id == generoId))
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Jogo>> BuscarPorTituloAsync(string titulo)
-    {
-        return await _dbSet
-            .Where(j => j.Titulo.Contains(titulo))
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Jogo>> ObterComGenerosAsync()
-    {
-        return await _dbSet
+        return await _context.Jogos
             .Include(j => j.Generos)
+            .Where(j => j.UsuarioId == usuarioId)
+            .OrderBy(j => j.Titulo)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Jogo>> ObterPorStatusAsync(StatusMidia status, string usuarioId)
+    {
+        return await _context.Jogos
+            .Include(j => j.Generos)
+            .Where(j => j.Status == status && j.UsuarioId == usuarioId)
+            .OrderBy(j => j.Titulo)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Jogo>> ObterPorGeneroAsync(Guid generoId, string usuarioId)
+    {
+        return await _context.Jogos
+            .Include(j => j.Generos)
+            .Where(j => j.Generos.Any(g => g.Id == generoId) && j.UsuarioId == usuarioId)
+            .OrderBy(j => j.Titulo)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Jogo>> BuscarPorTituloAsync(string titulo, string usuarioId)
+    {
+        return await _context.Jogos
+            .Include(j => j.Generos)
+            .Where(j => j.Titulo.Contains(titulo) && j.UsuarioId == usuarioId)
+            .OrderBy(j => j.Titulo)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Jogo>> ObterComGenerosAsync(string usuarioId)
+    {
+        return await _context.Jogos
+            .Include(j => j.Generos)
+            .Where(j => j.UsuarioId == usuarioId)
+            .OrderBy(j => j.Titulo)
             .ToListAsync();
     }
 }
