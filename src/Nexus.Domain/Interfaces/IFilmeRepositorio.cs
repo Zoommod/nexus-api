@@ -6,9 +6,9 @@ namespace Nexus.Domain.Interfaces;
 
 public interface IFilmeRepositorio : IRepositorioBase<Filme>
 {
-    Task<IEnumerable<Filme>> ObterPorStatusAsync(StatusMidia status);
-    Task<IEnumerable<Filme>> ObterPorGeneroAsync(Guid generoId);
-    Task<IEnumerable<Filme>> BuscarPorTituloAsync(string titulo);
-    Task<IEnumerable<Filme>> ObterComGenerosAsync();
-    Task<IEnumerable<Filme>> ObterPorDiretorAsync(string diretor);
+    Task<IEnumerable<Filme>> ObterTodosPorUsuarioAsync(string usuarioId);
+    Task<IEnumerable<Filme>> ObterPorStatusAsync(StatusMidia status, string usuarioId);
+    Task<IEnumerable<Filme>> ObterPorGeneroAsync(Guid generoId, string usuarioId);
+    Task<IEnumerable<Filme>> BuscarPorTituloAsync(string titulo, string usuarioId);
+    Task<IEnumerable<Filme>> ObterComGenerosAsync(string usuarioId);
 }
