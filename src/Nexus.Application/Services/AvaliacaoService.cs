@@ -44,13 +44,20 @@ public class AvaliacaoService : IAvaliacaoService
             var jogo = await _jogoRepositorio.ObterPorIdAsync(dto.JogoId.Value);
             if (jogo == null)
                 throw new KeyNotFoundException("Jogo não encontrado");
+            
+            if(jogo.UsuarioId != usuarioId)
+                throw new UnauthorizedAccessException("Você não pode avaliar jogos de outros usuários");
         }
+
 
         if (dto.FilmeId.HasValue)
         {
             var filme = await _filmeRepositorio.ObterPorIdAsync(dto.FilmeId.Value);
             if (filme == null)
                 throw new KeyNotFoundException("Filme não encontrado");
+            
+            if(filme.UsuarioId != usuarioId)
+                throw new UnauthorizedAccessException("Você não pode avaliar filmes de outros usuários");
         }
 
         var avaliacao = _mapper.Map<Avaliacao>(dto);
