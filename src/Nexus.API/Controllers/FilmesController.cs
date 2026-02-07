@@ -10,6 +10,7 @@ using Nexus.Domain.Enums;
 namespace Nexus.API.Controllers;
 
 [Authorize]
+[Route("api/[controller]")] 
 public class FilmesController : BaseController
 {
     private readonly IFilmeService _filmeService;
