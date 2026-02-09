@@ -1,5 +1,3 @@
-using Microsoft.VisualBasic;
-
 namespace Nexus.Domain.Common;
 
 public record class PaginacaoParametros
