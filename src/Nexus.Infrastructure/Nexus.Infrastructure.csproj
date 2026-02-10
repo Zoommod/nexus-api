@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Data/" />
     <Folder Include="Data/Configurations/" />
+    <Folder Include="Extensions/" />
     <Folder Include="Identity/" />
     <Folder Include="Repositories/" />
     <Folder Include="Services/" />
