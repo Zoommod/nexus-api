@@ -1,4 +1,5 @@
 using System;
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Enums;
 
@@ -11,4 +12,5 @@ public interface IJogoRepositorio : IRepositorioBase<Jogo>
     Task<IEnumerable<Jogo>> ObterPorGeneroAsync(Guid generoId, string usuarioId);
     Task<IEnumerable<Jogo>> BuscarPorTituloAsync(string titulo, string usuarioId);
     Task<IEnumerable<Jogo>> ObterComGenerosAsync(string usuarioId);
+    Task<ResultadoPaginado<Jogo>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
 }
