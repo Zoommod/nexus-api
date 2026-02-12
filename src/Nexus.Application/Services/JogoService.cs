@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.VisualBasic;
 using Nexus.Application.DTOs.Jogo;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Enums;
 using Nexus.Domain.Interfaces;
@@ -120,5 +121,17 @@ public class JogoService : IJogoService
             throw new UnauthorizedAccessException("Você não tem permissão para deletar este jogo");
 
         await _jogoRepositorio.DeletarAsync(jogo.Id);
+    }
+    public async Task<ResultadoPaginado<JogoDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros)
+    {
+        var jogosPaginados = await _jogoRepositorio.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
+        
+        var jogosDto = _mapper.Map<IReadOnlyList<JogoDto>>(jogosPaginados.Itens);
+        
+        return ResultadoPaginado<JogoDto>.Criar(
+            jogosDto,
+            jogosPaginados.TotalItens,
+            jogosPaginados.PaginaAtual,
+            jogosPaginados.TamanhoPagina);
     }
 }

@@ -1,4 +1,5 @@
 using Nexus.Application.DTOs.Jogo;
+using Nexus.Domain.Common;
 using Nexus.Domain.Enums;
 
 namespace Nexus.Application.Interfaces;
@@ -12,4 +13,5 @@ public interface IJogoService
     Task<JogoDto> CriarAsync(CriarJogoDto dto, string usuarioId);
     Task<JogoDto> AtualizarAsync(Guid id, AtualizarJogoDto dto, string usuarioId);
     Task DeletarAsync(Guid id, string usuarioId);
+    Task<ResultadoPaginado<JogoDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
 }
