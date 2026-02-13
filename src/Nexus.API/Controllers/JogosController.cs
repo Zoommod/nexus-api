@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Application.DTOs.Jogo;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Common;
 using Nexus.Domain.Enums;
 
 namespace Nexus.API.Controllers;
@@ -19,11 +20,35 @@ public class JogosController : BaseController
     }
 
     [HttpGet]
+    [Obsolete("Use GET /api/jogos/paginado para melhor performance")]
     public async Task<ActionResult<IEnumerable<JogoDto>>> ObterTodos()
     {
         var usuarioId = ObterUsuarioId();
         var jogos = await _jogoService.ObterTodosPorUsuarioAsync(usuarioId);
         return Ok(jogos);
+    }
+
+    [HttpGet("paginado")]
+    public async Task<ActionResult<ResultadoPaginado<JogoDto>>> ObterTodosPaginado(
+        [FromBody] int numeroPagina = 1,
+        [FromBody] int tamanhoPagina = 20,
+        [FromBody] string? ordenarPor = null,
+        [FromBody] string direcao = "asc",
+        [FromBody] string? busca = null
+    )
+    {
+        var usuarioId = ObterUsuarioId();
+        var parametros = new PaginacaoParametros
+        {
+            NumeroPagina = numeroPagina,
+            TamanhoPagina = tamanhoPagina,
+            OrdenarPor = ordenarPor,
+            Direcao = direcao,
+            Busca = busca
+        };
+
+        var resultado = await _jogoService.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
+        return Ok(resultado);
     }
 
     [HttpGet("{id}")]
