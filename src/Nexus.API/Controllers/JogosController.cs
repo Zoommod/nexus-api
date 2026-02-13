@@ -30,23 +30,10 @@ public class JogosController : BaseController
 
     [HttpGet("paginado")]
     public async Task<ActionResult<ResultadoPaginado<JogoDto>>> ObterTodosPaginado(
-        [FromBody] int numeroPagina = 1,
-        [FromBody] int tamanhoPagina = 20,
-        [FromBody] string? ordenarPor = null,
-        [FromBody] string direcao = "asc",
-        [FromBody] string? busca = null
+        [FromQuery] PaginacaoParametros parametros
     )
     {
         var usuarioId = ObterUsuarioId();
-        var parametros = new PaginacaoParametros
-        {
-            NumeroPagina = numeroPagina,
-            TamanhoPagina = tamanhoPagina,
-            OrdenarPor = ordenarPor,
-            Direcao = direcao,
-            Busca = busca
-        };
-
         var resultado = await _jogoService.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
         return Ok(resultado);
     }
