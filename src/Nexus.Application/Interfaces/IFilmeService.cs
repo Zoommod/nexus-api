@@ -1,5 +1,6 @@
 using System;
 using Nexus.Application.DTOs.Filme;
+using Nexus.Domain.Common;
 using Nexus.Domain.Enums;
 
 namespace Nexus.Application.Interfaces;
@@ -13,4 +14,5 @@ public interface IFilmeService
     Task<FilmeDto> CriarAsync(CriarFilmeDto dto, string usuarioId);
     Task<FilmeDto> AtualizarAsync(Guid id, AtualizarFilmeDto dto, string usuarioId);
     Task DeletarAsync(Guid id, string usuarioId);
+    Task<ResultadoPaginado<FilmeDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
 }

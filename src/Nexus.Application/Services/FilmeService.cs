@@ -2,6 +2,7 @@ using System;
 using AutoMapper;
 using Nexus.Application.DTOs.Filme;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Enums;
 using Nexus.Domain.Interfaces;
@@ -119,4 +120,18 @@ public class FilmeService : IFilmeService
 
         await _filmeRepositorio.DeletarAsync(filme.Id);
     }
+
+    public async Task<ResultadoPaginado<FilmeDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros)
+    {
+        var filmesPaginados = await _filmeRepositorio.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
+        
+        var filmesDto = _mapper.Map<IReadOnlyList<FilmeDto>>(filmesPaginados.Itens);
+        
+        return ResultadoPaginado<FilmeDto>.Criar(
+            filmesDto,
+            filmesPaginados.TotalItens,
+            filmesPaginados.PaginaAtual,
+            filmesPaginados.TamanhoPagina);
+    }
+    
 }

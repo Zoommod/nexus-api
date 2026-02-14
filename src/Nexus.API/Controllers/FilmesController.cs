@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Application.DTOs.Filme;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Enums;
 
@@ -21,11 +22,21 @@ public class FilmesController : BaseController
     }
 
     [HttpGet]
+    [Obsolete("Use GET /api/filmes/paginado")]
     public async Task<ActionResult<IEnumerable<FilmeDto>>> ObterTodos()
     {
         var usuarioId = ObterUsuarioId();
         var filmes = await _filmeService.ObterTodosPorUsuarioAsync(usuarioId);
         return Ok(filmes);
+    }
+
+    [HttpGet("paginado")]
+    public async Task<ActionResult<ResultadoPaginado<FilmeDto>>> ObterTodosPaginado(
+        [FromQuery] PaginacaoParametros parametros)
+    {
+        var usuarioId = ObterUsuarioId();
+        var resultado = await _filmeService.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
+        return Ok(resultado);
     }
 
     [HttpGet("{id}")]
