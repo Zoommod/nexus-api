@@ -1,6 +1,7 @@
 using AutoMapper;
 using Nexus.Application.DTOs.Avaliacao;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Common;
 using Nexus.Domain.Entities;
 using Nexus.Domain.Interfaces;
 
@@ -109,6 +110,19 @@ public class AvaliacaoService : IAvaliacaoService
             throw new UnauthorizedAccessException("Você não tem permissão para deletar esta avaliação");
 
         await _avaliacaoRepositorio.DeletarAsync(id);
+    }
+
+    public async Task<ResultadoPaginado<AvaliacaoDto>> ObterPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros)
+    {
+        var avaliacoesPaginadas = await _avaliacaoRepositorio.ObterPorUsuarioPaginadoAsync(usuarioId, parametros);
+        
+        var avaliacoesDto = _mapper.Map<IReadOnlyList<AvaliacaoDto>>(avaliacoesPaginadas.Itens);
+        
+        return ResultadoPaginado<AvaliacaoDto>.Criar(
+            avaliacoesDto,
+            avaliacoesPaginadas.TotalItens,
+            avaliacoesPaginadas.PaginaAtual,
+            avaliacoesPaginadas.TamanhoPagina);
     }
 
     public async Task<AvaliacaoDto?> ObterPorIdAsync(Guid id)

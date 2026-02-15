@@ -1,5 +1,6 @@
 using System;
 using Nexus.Application.DTOs.Avaliacao;
+using Nexus.Domain.Common;
 
 namespace Nexus.Application.Interfaces;
 
@@ -12,4 +13,5 @@ public interface IAvaliacaoService
     Task<IEnumerable<AvaliacaoDto>> ObterPorJogoAsync(Guid jogoId);
     Task<IEnumerable<AvaliacaoDto>> ObterPorFilmeAsync(Guid filmeId);
     Task<IEnumerable<AvaliacaoDto>> ObterPorUsuarioAsync(string usuarioId);
+    Task<ResultadoPaginado<AvaliacaoDto>> ObterPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
 }

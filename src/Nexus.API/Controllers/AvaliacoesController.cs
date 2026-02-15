@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nexus.Application.DTOs.Avaliacao;
 using Nexus.Application.Interfaces;
+using Nexus.Domain.Common;
 
 namespace Nexus.API.Controllers;
 
@@ -35,6 +36,7 @@ public class AvaliacoesController : BaseController
         return Ok(avaliacoes);
     }
 
+
     [HttpGet("filme/{filmeId}")]
     public async Task<ActionResult<IEnumerable<AvaliacaoDto>>> ObterPorFilme(Guid filmeId)
     {
@@ -42,13 +44,26 @@ public class AvaliacoesController : BaseController
         return Ok(avaliacoes);
     }
 
+
     [HttpGet("minhas")]
+    [Obsolete("Use GET /api/avaliacoes/minhas/paginado para melhor performance")]
     public async Task<ActionResult<IEnumerable<AvaliacaoDto>>> ObterMinhasAvaliacoes()
     {
         var usuarioId = ObterUsuarioId();
         var avaliacoes = await _avaliacaoService.ObterPorUsuarioAsync(usuarioId);
         return Ok(avaliacoes);
     }
+
+
+    [HttpGet("minhas/paginado")]
+    public async Task<ActionResult<ResultadoPaginado<AvaliacaoDto>>> ObterMinhasAvaliacoesPaginado(
+        [FromQuery] PaginacaoParametros parametros)
+    {
+        var usuarioId = ObterUsuarioId();
+        var resultado = await _avaliacaoService.ObterPorUsuarioPaginadoAsync(usuarioId, parametros);
+        return Ok(resultado);
+    }
+
 
     [HttpPost]
     public async Task<ActionResult<AvaliacaoDto>> Criar([FromBody] CriarAvaliacaoDto dto)
@@ -68,6 +83,7 @@ public class AvaliacoesController : BaseController
             return NotFound(new { mensagem = ex.Message });
         }
     }
+
 
     [HttpPut("{id}")]
     public async Task<ActionResult<AvaliacaoDto>> Atualizar(Guid id, [FromBody] AtualizarAvaliacaoDto dto)
