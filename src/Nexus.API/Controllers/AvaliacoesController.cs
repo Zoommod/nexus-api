@@ -56,8 +56,7 @@ public class AvaliacoesController : BaseController
 
 
     [HttpGet("minhas/paginado")]
-    public async Task<ActionResult<ResultadoPaginado<AvaliacaoDto>>> ObterMinhasAvaliacoesPaginado(
-        [FromQuery] PaginacaoParametros parametros)
+    public async Task<ActionResult<ResultadoPaginado<AvaliacaoDto>>> ObterMinhasAvaliacoesPaginado([FromQuery] PaginacaoParametros parametros)
     {
         var usuarioId = ObterUsuarioId();
         var resultado = await _avaliacaoService.ObterPorUsuarioPaginadoAsync(usuarioId, parametros);
