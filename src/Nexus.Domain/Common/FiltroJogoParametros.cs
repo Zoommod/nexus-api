@@ -2,10 +2,10 @@ using System;
 using Nexus.Domain.Common;
 using Nexus.Domain.Enums;
 
-namespace Nexus.Application.DTOs.Jogo;
+namespace Nexus.Domain.Common;
 
 
-public record FiltroJogoDto : PaginacaoParametros
+public record FiltroJogoParametros : PaginacaoParametros
 {
 
     public string? Titulo { get; init; }

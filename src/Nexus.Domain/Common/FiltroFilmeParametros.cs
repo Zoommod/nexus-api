@@ -1,9 +1,9 @@
 using Nexus.Domain.Common;
 using Nexus.Domain.Enums;
 
-namespace Nexus.Application.DTOs.Filme;
+namespace Nexus.Domain.Common;
 
-public record class FiltroFilmeDto : PaginacaoParametros
+public record class FiltroFilmeParametros : PaginacaoParametros
 {
     public string? Titulo { get; init; }
     public string? Diretor { get; init; }
