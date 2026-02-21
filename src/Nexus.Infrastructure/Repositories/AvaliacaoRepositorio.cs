@@ -32,7 +32,9 @@ public class AvaliacaoRepositorio : RepositorioBase<Avaliacao>, IAvaliacaoReposi
             .ToListAsync();
     }
 
-    public async Task<ResultadoPaginado<Avaliacao>> ObterPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros)
+    public async Task<ResultadoPaginado<Avaliacao>> ObterPorUsuarioPaginadoAsync(
+        string usuarioId,
+        PaginacaoParametros parametros)
     {
         var query = _context.Avaliacoes
             .Include(a => a.Jogo)
@@ -57,6 +59,69 @@ public class AvaliacaoRepositorio : RepositorioBase<Avaliacao>, IAvaliacaoReposi
         };
 
         return await query.ToPaginatedListAsync(parametros);
+    }
+
+    public async Task<ResultadoPaginado<Avaliacao>> ObterComFiltrosAsync(string usuarioId, FiltroAvaliacaoParametros filtros)
+    {
+        var query = _context.Avaliacoes
+            .Include(a => a.Jogo)
+            .Include(a => a.Filme)
+            .Where(a => a.UsuarioId == usuarioId)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filtros.Conteudo))
+        {
+            var conteudoLower = filtros.Conteudo.ToLower();
+            query = query.Where(a => a.Conteudo.ToLower().Contains(conteudoLower));
+        }
+
+        if (filtros.NotaMinima.HasValue)
+        {
+            query = query.Where(a => a.Nota >= filtros.NotaMinima.Value);
+        }
+
+        if (filtros.NotaMaxima.HasValue)
+        {
+            query = query.Where(a => a.Nota <= filtros.NotaMaxima.Value);
+        }
+
+        if (filtros.ApenasJogos.HasValue && filtros.ApenasJogos.Value)
+        {
+            query = query.Where(a => a.JogoId != null);
+        }
+
+        if (filtros.ApenasFilmes.HasValue && filtros.ApenasFilmes.Value)
+        {
+            query = query.Where(a => a.FilmeId != null);
+        }
+
+        if (filtros.DataCriacaoMinima.HasValue)
+        {
+            query = query.Where(a => a.DataCriacao >= filtros.DataCriacaoMinima.Value);
+        }
+
+        if (filtros.DataCriacaoMaxima.HasValue)
+        {
+            query = query.Where(a => a.DataCriacao <= filtros.DataCriacaoMaxima.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(filtros.Busca))
+        {
+            var buscaLower = filtros.Busca.ToLower();
+            query = query.Where(a =>
+                a.Conteudo.ToLower().Contains(buscaLower) ||
+                (a.Jogo != null && a.Jogo.Titulo.ToLower().Contains(buscaLower)) ||
+                (a.Filme != null && a.Filme.Titulo.ToLower().Contains(buscaLower)));
+        }
+
+        query = filtros.OrdenarPor switch
+        {
+            "Nota" => query.OrderByProperty(nameof(Avaliacao.Nota), filtros.EhOrdenacaoDescendente()),
+            "DataCriacao" => query.OrderByProperty(nameof(Avaliacao.DataCriacao), filtros.EhOrdenacaoDescendente()),
+            _ => query.OrderByDescending(a => a.DataCriacao)
+        };
+
+        return await query.ToPaginatedListAsync(filtros);
     }
 
     public async Task<IEnumerable<Avaliacao>> ObterPorJogoAsync(Guid jogoId)

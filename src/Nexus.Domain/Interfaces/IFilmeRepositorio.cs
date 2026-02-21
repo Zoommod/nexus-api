@@ -13,4 +13,6 @@ public interface IFilmeRepositorio : IRepositorioBase<Filme>
     Task<IEnumerable<Filme>> BuscarPorTituloAsync(string titulo, string usuarioId);
     Task<IEnumerable<Filme>> ObterComGenerosAsync(string usuarioId);
     Task<ResultadoPaginado<Filme>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
+    Task<ResultadoPaginado<Filme>> ObterComFiltrosAsync(string usuarioId, FiltroFilmeParametros filtros);
+
 }

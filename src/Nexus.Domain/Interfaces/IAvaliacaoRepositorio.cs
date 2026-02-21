@@ -11,4 +11,5 @@ public interface IAvaliacaoRepositorio : IRepositorioBase<Avaliacao>
     Task<IEnumerable<Avaliacao>> ObterPorUsuarioAsync(string usuarioId);
     Task<Avaliacao?> ObterComDetalhesAsync(Guid avaliacaoId);
     Task<ResultadoPaginado<Avaliacao>> ObterPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
+    Task<ResultadoPaginado<Avaliacao>> ObterComFiltrosAsync(string usuarioId, FiltroAvaliacaoParametros filtros);
 }
