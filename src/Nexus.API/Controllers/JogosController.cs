@@ -30,11 +30,19 @@ public class JogosController : BaseController
 
     [HttpGet("paginado")]
     public async Task<ActionResult<ResultadoPaginado<JogoDto>>> ObterTodosPaginado(
-        [FromQuery] PaginacaoParametros parametros
-    )
+        [FromQuery] PaginacaoParametros parametros)
     {
         var usuarioId = ObterUsuarioId();
         var resultado = await _jogoService.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
+        return Ok(resultado);
+    }
+
+    [HttpGet("filtros")]
+    public async Task<ActionResult<ResultadoPaginado<JogoDto>>> ObterComFiltros(
+        [FromQuery] FiltroJogoParametros filtros)
+    {
+        var usuarioId = ObterUsuarioId();
+        var resultado = await _jogoService.ObterComFiltrosAsync(usuarioId, filtros);
         return Ok(resultado);
     }
 

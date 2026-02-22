@@ -17,10 +17,7 @@ public class JogoService : IJogoService
     private readonly IGeneroRepositorio _generoRepositorio;
     private readonly IMapper _mapper;
 
-    public JogoService(
-        IJogoRepositorio jogoRepositorio,
-        IGeneroRepositorio generoRepositorio,
-        IMapper mapper)
+    public JogoService(IJogoRepositorio jogoRepositorio, IGeneroRepositorio generoRepositorio, IMapper mapper)
     {
         _jogoRepositorio = jogoRepositorio;
         _generoRepositorio = generoRepositorio;
@@ -59,20 +56,20 @@ public class JogoService : IJogoService
     {
         var jogo = _mapper.Map<Jogo>(dto);
         jogo.UsuarioId = usuarioId;
-        jogo.DataCriacao = DateTime.UtcNow;
 
         if (dto.GenerosIds != null && dto.GenerosIds.Any())
         {
-            var generos = await _generoRepositorio.ObterPorIdsAsync(dto.GenerosIds);
-
-            if (generos.Count() != dto.GenerosIds.Count())
-                throw new ArgumentException("Um ou mais gêneros informados não existem");
-
-            jogo.Generos = generos.ToList();
+            var generos = new List<Genero>();
+            foreach (var generoId in dto.GenerosIds)
+            {
+                var genero = await _generoRepositorio.ObterPorIdAsync(generoId);
+                if (genero != null)
+                    generos.Add(genero);
+            }
+            jogo.Generos = generos;
         }
 
         await _jogoRepositorio.AdicionarAsync(jogo);
-
         return _mapper.Map<JogoDto>(jogo);
     }
 
@@ -86,27 +83,21 @@ public class JogoService : IJogoService
         if (jogo.UsuarioId != usuarioId)
             throw new UnauthorizedAccessException("Você não tem permissão para atualizar este jogo");
 
-        jogo.Titulo = dto.Titulo;
-        jogo.Descricao = dto.Descricao;
-        jogo.DataLancamento = dto.DataLancamento;
-        jogo.Desenvolvedora = dto.Desenvolvedora;
-        jogo.Publicadora = dto.Publicadora;
-        jogo.UrlImagemCapa = dto.UrlImagemCapa;
-        jogo.Status = (StatusMidia)dto.Status;
-        jogo.NotaUsuario = dto.NotaUsuario;
+        _mapper.Map(dto, jogo);
 
-        if (dto.GenerosIds != null && dto.GenerosIds.Any())
+        if (dto.GenerosIds != null)
         {
-            var generos = await _generoRepositorio.ObterPorIdsAsync(dto.GenerosIds);
-
-            if (generos.Count() != dto.GenerosIds.Count())
-                throw new ArgumentException("Um ou mais gêneros informados não existem");
-
-            jogo.Generos = generos.ToList();
+            var generos = new List<Genero>();
+            foreach (var generoId in dto.GenerosIds)
+            {
+                var genero = await _generoRepositorio.ObterPorIdAsync(generoId);
+                if (genero != null)
+                    generos.Add(genero);
+            }
+            jogo.Generos = generos;
         }
 
         await _jogoRepositorio.AtualizarAsync(jogo);
-
         return _mapper.Map<JogoDto>(jogo);
     }
 
@@ -122,12 +113,24 @@ public class JogoService : IJogoService
 
         await _jogoRepositorio.DeletarAsync(jogo.Id);
     }
-    public async Task<ResultadoPaginado<JogoDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros)
+
+        public async Task<ResultadoPaginado<JogoDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros)
     {
         var jogosPaginados = await _jogoRepositorio.ObterTodosPorUsuarioPaginadoAsync(usuarioId, parametros);
-        
         var jogosDto = _mapper.Map<IReadOnlyList<JogoDto>>(jogosPaginados.Itens);
-        
+
+        return ResultadoPaginado<JogoDto>.Criar(
+            jogosDto,
+            jogosPaginados.TotalItens,
+            jogosPaginados.PaginaAtual,
+            jogosPaginados.TamanhoPagina);
+    }
+
+    public async Task<ResultadoPaginado<JogoDto>> ObterComFiltrosAsync(string usuarioId, FiltroJogoParametros filtros)
+    {
+        var jogosPaginados = await _jogoRepositorio.ObterComFiltrosAsync(usuarioId, filtros);
+        var jogosDto = _mapper.Map<IReadOnlyList<JogoDto>>(jogosPaginados.Itens);
+
         return ResultadoPaginado<JogoDto>.Criar(
             jogosDto,
             jogosPaginados.TotalItens,

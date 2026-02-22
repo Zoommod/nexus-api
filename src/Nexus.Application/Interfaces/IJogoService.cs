@@ -14,4 +14,5 @@ public interface IJogoService
     Task<JogoDto> AtualizarAsync(Guid id, AtualizarJogoDto dto, string usuarioId);
     Task DeletarAsync(Guid id, string usuarioId);
     Task<ResultadoPaginado<JogoDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
+    Task<ResultadoPaginado<JogoDto>> ObterComFiltrosAsync(string usuarioId, FiltroJogoParametros filtros);
 }

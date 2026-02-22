@@ -13,4 +13,6 @@ public interface IJogoRepositorio : IRepositorioBase<Jogo>
     Task<IEnumerable<Jogo>> BuscarPorTituloAsync(string titulo, string usuarioId);
     Task<IEnumerable<Jogo>> ObterComGenerosAsync(string usuarioId);
     Task<ResultadoPaginado<Jogo>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
+    Task<ResultadoPaginado<Jogo>> ObterComFiltrosAsync(string usuarioId, FiltroJogoParametros filtros);
+
 }
