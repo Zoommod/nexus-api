@@ -14,4 +14,5 @@ public interface IAvaliacaoService
     Task<IEnumerable<AvaliacaoDto>> ObterPorFilmeAsync(Guid filmeId);
     Task<IEnumerable<AvaliacaoDto>> ObterPorUsuarioAsync(string usuarioId);
     Task<ResultadoPaginado<AvaliacaoDto>> ObterPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
+    Task<ResultadoPaginado<AvaliacaoDto>> ObterComFiltrosAsync(string usuarioId, FiltroAvaliacaoParametros filtros);
 }

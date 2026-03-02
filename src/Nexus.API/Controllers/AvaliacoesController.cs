@@ -63,6 +63,13 @@ public class AvaliacoesController : BaseController
         return Ok(resultado);
     }
 
+    [HttpGet("minhas/filtros")]
+    public async Task<ActionResult<ResultadoPaginado<AvaliacaoDto>>> ObterComFiltros([FromQuery] FiltroAvaliacaoParametros filtros)
+    {
+        var usuarioId = ObterUsuarioId();
+        var resultado = await _avaliacaoService.ObterComFiltrosAsync(usuarioId, filtros);
+        return Ok(resultado);
+    }
 
     [HttpPost]
     public async Task<ActionResult<AvaliacaoDto>> Criar([FromBody] CriarAvaliacaoDto dto)

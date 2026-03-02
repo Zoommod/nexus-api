@@ -148,4 +148,17 @@ public class AvaliacaoService : IAvaliacaoService
         var avaliacoes = await _avaliacaoRepositorio.ObterPorUsuarioAsync(usuarioId);
         return _mapper.Map<IEnumerable<AvaliacaoDto>>(avaliacoes);
     }
+
+    public async Task<ResultadoPaginado<AvaliacaoDto>> ObterComFiltrosAsync(string usuarioId, FiltroAvaliacaoParametros filtros)
+    {
+        var avaliacoesPaginadas = await _avaliacaoRepositorio.ObterComFiltrosAsync(usuarioId, filtros);
+        var avaliacoesDto = _mapper.Map<IReadOnlyList<AvaliacaoDto>>(avaliacoesPaginadas.Itens);
+
+        return ResultadoPaginado<AvaliacaoDto>.Criar(
+            avaliacoesDto,
+            avaliacoesPaginadas.TotalItens,
+            avaliacoesPaginadas.PaginaAtual,
+            avaliacoesPaginadas.TamanhoPagina
+        );
+    }
 }
