@@ -134,4 +134,16 @@ public class FilmeService : IFilmeService
             filmesPaginados.TamanhoPagina);
     }
     
+    public async Task<ResultadoPaginado<FilmeDto>> ObterComFiltrosAsync(string usuarioId, FiltroFilmeParametros filtros)
+    {
+        var filmesPaginados = await _filmeRepositorio.ObterComFiltrosAsync(usuarioId, filtros);
+        var filmesDto = _mapper.Map<IReadOnlyList<FilmeDto>>(filmesPaginados.Itens);
+
+        return ResultadoPaginado<FilmeDto>.Criar(
+            filmesDto,
+            filmesPaginados.TotalItens,
+            filmesPaginados.PaginaAtual,
+            filmesPaginados.TamanhoPagina
+        );
+    }
 }

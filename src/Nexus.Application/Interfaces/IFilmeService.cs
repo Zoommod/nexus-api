@@ -15,4 +15,5 @@ public interface IFilmeService
     Task<FilmeDto> AtualizarAsync(Guid id, AtualizarFilmeDto dto, string usuarioId);
     Task DeletarAsync(Guid id, string usuarioId);
     Task<ResultadoPaginado<FilmeDto>> ObterTodosPorUsuarioPaginadoAsync(string usuarioId, PaginacaoParametros parametros);
+    Task<ResultadoPaginado<FilmeDto>> ObterComFiltrosAsync(string usuarioId, FiltroFilmeParametros filtros);
 }

@@ -70,6 +70,14 @@ public class FilmesController : BaseController
         return Ok(filmes);
     }
 
+    [HttpGet("filtros")]
+    public async Task<ActionResult<ResultadoPaginado<FilmeDto>>> ObterComFiltros([FromQuery] FiltroFilmeParametros filtros)
+    {
+        var usuarioId = ObterUsuarioId();
+        var resultado = await _filmeService.ObterComFiltrosAsync(usuarioId, filtros);
+        return Ok(resultado);
+    }
+
     [HttpPost]
     public async Task<ActionResult<FilmeDto>> Criar([FromBody] CriarFilmeDto dto)
     {
