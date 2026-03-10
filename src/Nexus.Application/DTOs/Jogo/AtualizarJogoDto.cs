@@ -10,7 +10,7 @@ public class AtualizarJogoDto
     public string? Desenvolvedora { get; set; }
     public string? Publicadora { get; set; }
     public string? UrlImagemCapa { get; set; }
-    public int Status { get; set; }
+    public int? Status { get; set; }
     public decimal? NotaUsuario { get; set; }
     public List<Guid> GenerosIds { get; set; } = new();
 }
